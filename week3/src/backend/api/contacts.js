@@ -29,4 +29,28 @@ router.post("/", async (request, response) => {
   }
 });
 
+router.get('/search', async (req, res) => {
+  const { name, phone } = req.query;
+
+  if(!name && !phone)
+    return res.status(400).send('Please provide a search param');
+
+  try {
+    let contactsQuery = db('contacts');
+
+    if(name)
+      contactsQuery = contactsQuery.where('name', 'like', `%${name}%`);
+
+    if(phone)
+      contactsQuery = contactsQuery.where('phone', 'like', `%${phone}%`);
+
+    console.log(contactsQuery.toString());
+
+    const contacts = await contactsQuery;
+    res.json(contacts);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+})
+
 export default router;

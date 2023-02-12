@@ -10,6 +10,7 @@ const port = process.env.PORT;
 // app.use(express.urlencoded({ extended: true }));
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
+app.use(express.static('./src/frontend'))
 
 router.use("/contacts", contactsRouter);
 
