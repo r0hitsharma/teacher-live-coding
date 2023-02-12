@@ -5,7 +5,7 @@ import knex from "knex";
 
 // create connection
 const db = knex({
-  client: "pg",
+  client: "mysql2",
   connection: {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
