@@ -1,7 +1,10 @@
-require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config();
+
+import knex from "knex";
 
 // create connection
-const knex = require("knex")({
+const db = knex({
   client: "mysql2",
   connection: {
     host: process.env.DB_HOST,
@@ -14,8 +17,8 @@ const knex = require("knex")({
 });
 
 // Check that the connection works
-knex.raw("SELECT VERSION()").then(() => {
+db.raw("SELECT VERSION()").then(() => {
   console.log(`connection to db successful!`);
 });
 
-module.exports = knex;
+export default db;

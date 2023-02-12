@@ -1,12 +1,12 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const knex = require("../database");
+import db from "../database.js";
 
 router.get("/", async (request, response) => {
   try {
     // knex syntax for selecting things. Look up the documentation for knex for further info
-    const titles = await knex("contacts").select("title");
-    response.json(titles);
+    const contacts = await db("contacts").select("*");
+    response.json(contacts);
   } catch (error) {
     throw error;
   }
@@ -14,13 +14,19 @@ router.get("/", async (request, response) => {
 
 router.post("/", async (request, response) => {
   try {
-    console.log(response.body);
+    const contact = request.body;
+
+    if(!contact)
+      return response.status(400);
+
+    console.log(contact);
     // This could be insecure!!
-    const insertedContact = await knex("contacts").insert(response.body);
-    response.json(insertedContact);
+    await db("contacts").insert(contact);
+    response.status(201).json(contact);
   } catch (error) {
-    throw error;
+    console.error(error);
+    response.status(500).send(error.message);
   }
 });
 
-module.exports = router;
+export default router;
